@@ -1,0 +1,22 @@
+# Core Data & Computation.
+numpy
+pandas
+scipy
+
+# Visualization.
+matplotlib
+seaborn
+missingno
+
+# Machine Learning.
+scikit-learn
+joblib
+
+# Hyperparameter Tuning.
+optuna
+
+# Web Frameworks.
+streamlit
+flask
+fastapi
+uvicorn  # ASGI server for FastAPI.
