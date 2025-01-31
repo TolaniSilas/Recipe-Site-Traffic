@@ -3,26 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tasty Bytes Recipe Prediction</title>
+    <title>Tasty Bytes Recipe Traffic Predictor</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
     <!-- Header Section -->
     <header>
-        <h1>Tasty Bytes Recipe Predictions</h1>
-        <p>Your go-to site for predicting high traffic recipes that drive subscriptions!</p>
+        <h1>Tasty Bytes Recipe Traffic Predictor</h1>
+        <p>Helping product managers make data-driven decisions in selecting high-traffic recipes.</p>
     </header>
 
-    <!-- About Section -->
-    <section id="about">
-        <h2>About Tasty Bytes</h2>
-        <p>Tasty Bytes was founded in 2020 during the Covid Pandemic. The world was craving inspiration, and we decided to provide it. Initially a recipe search engine, Tasty Bytes now offers monthly subscription meal plans, including ingredient delivery with our premium plan.</p>
-    </section>
-
-    <!-- Recipe Prediction Form -->
+    <!-- Prediction Form -->
     <section id="prediction">
         <h2>Predict Recipe Traffic</h2>
+        <p>Input recipe details to determine its likelihood of driving high website traffic.</p>
         <form id="predictionForm">
             <label for="calories">Calories:</label>
             <input type="number" id="calories" name="calories" required><br><br>
@@ -53,54 +48,32 @@
             <label for="servings">Servings:</label>
             <input type="number" id="servings" name="servings" required><br><br>
 
-            <button type="submit">Predict Recipe Traffic</button>
+            <button type="submit">Predict Traffic</button>
         </form>
     </section>
 
     <!-- Prediction Results Section -->
     <section id="results" style="display:none;">
         <h2>Prediction Results</h2>
-        <div id="recipeDetails"></div>
-        <div id="predictionOutcome"></div>
-        <div id="predictionProbability"></div>
+        <p><strong>Predicted Traffic Outcome:</strong> <span id="predictionOutcome"></span></p>
+        <p><strong>Prediction Probability:</strong> <span id="predictionProbability"></span></p>
     </section>
 
-    <!-- Example Recipe Section -->
-    <section id="exampleRecipe">
-        <h2>Example Recipe: Tomato Soup</h2>
-        <p><strong>Servings:</strong> 4</p>
-        <p><strong>Time to make:</strong> 2 hours</p>
-        <p><strong>Category:</strong> Lunch/Snack</p>
-        <p><strong>Cost per serving:</strong> $</p>
-        <p><strong>Nutritional Information (per serving):</strong></p>
+    <!-- Data Insights Section -->
+    <section id="dataInsights">
+        <h2>Data Insights for Decision Making</h2>
+        <p>Our prediction model uses the following factors to determine whether a recipe will drive high traffic:</p>
         <ul>
-            <li>Calories: 123</li>
-            <li>Carbohydrate: 13g</li>
-            <li>Sugar: 1g</li>
-            <li>Protein: 4g</li>
+            <li><strong>Calories, Carbohydrates, Sugar, and Protein:</strong> Nutritional factors that influence recipe appeal.</li>
+            <li><strong>Category:</strong> Certain categories (e.g., ‘Desserts’ or ‘One Dish Meals’) may attract more visitors.</li>
+            <li><strong>Servings:</strong> Recipes with flexible servings may appeal to a broader audience.</li>
         </ul>
-        <h3>Ingredients:</h3>
-        <ul>
-            <li>Tomatoes</li>
-            <li>Onion</li>
-            <li>Carrot</li>
-            <li>Vegetable Stock</li>
-        </ul>
-        <h3>Method:</h3>
-        <ol>
-            <li>Cut the tomatoes into quarters....</li>
-        </ol>
+        <p>Use these insights along with the predictions to make informed decisions about featuring recipes on the website.</p>
     </section>
 
-    <!-- Data Information Section -->
-    <section id="dataInfo">
-        <h2>Data Information</h2>
-        <p>We use data including calories, carbohydrates, sugar, protein, category, and servings to predict which recipes will lead to high traffic on our website.</p>
-    </section>
-
-    <!-- Footer Section -->
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2025 Tasty Bytes. All rights reserved.</p>
+        <p>&copy; 2025 Tasty Bytes. Data-driven recipe selection for better engagement.</p>
     </footer>
 
     <script src="script.js"></script>
