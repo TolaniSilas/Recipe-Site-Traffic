@@ -1,7 +1,7 @@
+from typing import Tuple
 
 
-
-class TastyBytesModel:
+class TastyModel:
     """Represents a recipe and predicts its potential impact on website traffic."""
 
     def __init__(self, calories: float, carbohydrate: float, sugar: float, 
@@ -52,8 +52,3 @@ class TastyBytesModel:
 
         return traffic_category, predicted_traffic_increase
     
-
-
-
-
-

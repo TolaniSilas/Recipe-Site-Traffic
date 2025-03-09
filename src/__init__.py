@@ -1,1 +1,1 @@
-from .model.TastyBytesModel import TastyBytesModel
+from .model.TastyBytesModel import TastyModel

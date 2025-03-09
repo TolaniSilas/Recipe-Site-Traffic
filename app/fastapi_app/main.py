@@ -1,6 +1,10 @@
+import sys
+import os 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 from fastapi import FastAPI, HTTPException, Request
-from .schemas import PredictionInput
-from src import TastyBytesModel
+# from .schemas import PredictionInput
+from src import TastyModel
+from schemas import PredictionInput
 
 
 # Instantiate the FastAPI application.
@@ -23,34 +27,37 @@ def health():
 @app.post("/recipe_type")
 async def recipe_type(request: PredictionInput):
     """
-    Endpoint to predict recipe that would result in low or high traffic on the company's website based on the provided information.
+    Endpoint to predict whether a recipe will result in high or low traffic on the company's website.
 
     Args:
-        request (PredictionInput): The request body containing the applicant's 
-        income, coapplicant's income, loan amount, and credit history.
+        request (PredictionInput): The request body containing details about the recipe, including:
+            - Calories (float): The number of calories in the recipe.
+            - Carbohydrate (float): The amount of carbohydrates (in grams).
+            - Sugar (float): The sugar content (in grams).
+            - Protein (float): The protein content (in grams).
+            - Category (str): The category of the recipe.
+            - Servings (int): The number of servings the recipe provides.
 
     Returns:
         dict: A dictionary containing:
-            - `prediction` (str): A string indicating whether the recipe will result in 
-              high or low traffic on the website ("1.0" for high, "0.0" for low).
-            - `probability` (float): A float value representing the probability of the 
-              high or low traffic prediction.
+            - prediction (str): "1.0" for high traffic, "0.0" for low traffic.
+            - probability (float): Probability of the predicted outcome.
 
     Raises:
-        HTTPException: If there is an error during the prediction process, a 500 
-        Internal Server Error is raised with the error detail.
+        HTTPException: If an error occurs during the prediction process.
     """
+
     try:
         # Extract user information from the request body.
-        calories = request.Calories
-        carbohydrate = request.Carbohydrate
-        sugar = request.Sugar
-        protein = request.Protein
-        category = request.Category
-        servings = request.Servings
-        
+        calories = request.calories
+        carbohydrate = request.carbohydrate
+        sugar = request.sugar
+        protein = request.protein
+        category = request.category
+        servings = request.servings
+
         # Initialize the Tasty Bytes model.
-        model = TastyBytesModel(
+        model = TastyModel(
             calories=calories, 
             carbohydrate=carbohydrate, 
             sugar=sugar,
@@ -74,10 +81,6 @@ async def recipe_type(request: PredictionInput):
     except Exception as e:
         # Raise an HTTPException with status code 500 if an error occurs.
         raise HTTPException(status_code=500, detail=str(e))
-
-
-
-
 
 
 

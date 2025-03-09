@@ -103,7 +103,6 @@ def handle_recipe_traffic():
 
 
 
-
 if __name__ == "__main__":
 
     # Run the Flask app with debugging set to False(Production Environment).
