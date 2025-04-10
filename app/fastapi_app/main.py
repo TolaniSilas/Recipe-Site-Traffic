@@ -2,7 +2,6 @@ import sys
 import os 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 from fastapi import FastAPI, HTTPException, Request
-# from .schemas import PredictionInput
 from src import TastyModel
 from schemas import PredictionInput
 
@@ -57,7 +56,10 @@ async def recipe_type(request: PredictionInput):
         servings = request.servings
 
         # Initialize the Tasty Bytes model.
-        model = TastyModel(
+        model = TastyModel()
+
+        # Generate recipe traffic prediction and probability.
+        traffic_category, prediction_probability = model.predict_traffic_increase(
             calories=calories, 
             carbohydrate=carbohydrate, 
             sugar=sugar,
@@ -65,9 +67,6 @@ async def recipe_type(request: PredictionInput):
             category=category, 
             servings=servings
         )
-
-        # Generate recipe traffic prediction and probability.
-        traffic_category, prediction_probability = model.predict_traffic_increase()
         
         # Prepare the response in a serializable format.
         response = {
@@ -81,8 +80,6 @@ async def recipe_type(request: PredictionInput):
     except Exception as e:
         # Raise an HTTPException with status code 500 if an error occurs.
         raise HTTPException(status_code=500, detail=str(e))
-
-
 
 
 

@@ -12,6 +12,7 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 import joblib
 
 
+
 class TastyModel:
 
     def __init__(self, model=None):
@@ -33,15 +34,15 @@ class TastyModel:
             >>> tasty_model = TastyModel(model=model)
         """
 
-        if model is None:
-            raise ValueError("A scikit-learn classifier model must be provided!")
+        # if model is None:
+        #     raise ValueError("A scikit-learn classifier model must be provided!")
         
         self.model = model
         self.preprocessor = None  # This will be set during preprocessing!
         self.metrics = {}
 
         
-    def preprocess(self, df: pd.DataFrame, cols_to_drop: List, target_column: str, test_size: int):
+    def preprocess(self, df: pd.DataFrame, cols_to_drop: List, target_column: str, test_size: int, cv: bool):
         """Apply preprocessing steps to the input DataFrame.
         
         This method performs the following steps:
@@ -70,33 +71,54 @@ class TastyModel:
         # Encode target variable: low -> 0, high -> 1.
         y = df[self.target_column].map({'Low': 0, 'High': 1}) 
 
-        # Split data into train and test sets.
-        X_train, X_test, y_train, y_test = train_test_split(
-            X.values, y.values, test_size=test_size, random_state=42, stratify=y, shuffle=True 
-            )
-        
-        # Ensure X_train and X_test are pandas DataFrames.
-        X_train = pd.DataFrame(X_train, columns=X.columns)
-        X_test = pd.DataFrame(X_test, columns=X.columns)
+        if cv:
+            
+            # Ensure X is in pandas DataFrames.
+            X = pd.DataFrame(X, columns=X.columns)
+    
+            # Identify numerical and categorical features.
+            numerical_features = X.select_dtypes(include=['float64', 'int64']).columns.tolist()
+            categorical_features = X.select_dtypes(include=['category', 'object']).columns.tolist()
+    
+            # Define the ColumnTransformer for preprocessing.
+            self.preprocessor = ColumnTransformer(
+                transformers=[
+                    ('num', MinMaxScaler(), numerical_features),
+                    ('cat', OneHotEncoder(), categorical_features)
+                    ]
+                    )
+            
+            # Apply the preprocessing on the training and test data.
+            X_preprocessed = self.preprocessor.fit_transform(X)
 
-        # Identify numerical and categorical features.
-        numerical_features = X.select_dtypes(include=['float64', 'int64']).columns.tolist()
-        categorical_features = X.select_dtypes(include=['category', 'object']).columns.tolist()
+            return X_preprocessed, y
 
-        # Define the ColumnTransformer for preprocessing.
-        self.preprocessor = ColumnTransformer(
-            transformers=[
-                ('num', MinMaxScaler(), numerical_features),
-                ('cat', OneHotEncoder(), categorical_features)
-                ]
-                )
-        
-        # Apply the preprocessing on the training and test data.
-        X_train_preprocessed = self.preprocessor.fit_transform(X_train)
-        X_test_preprocessed = self.preprocessor.transform(X_test)
+        else:
+            # Split data into train and test sets.
+            X_train, X_test, y_train, y_test = train_test_split(
+                X.values, y.values, test_size=test_size, random_state=42, stratify=y, shuffle=True)
+            
+            # Ensure X_train and X_test are pandas DataFrames.
+            X_train = pd.DataFrame(X_train, columns=X.columns)
+            X_test = pd.DataFrame(X_test, columns=X.columns)
+    
+            # Identify numerical and categorical features.
+            numerical_features = X.select_dtypes(include=['float64', 'int64']).columns.tolist()
+            categorical_features = X.select_dtypes(include=['category', 'object']).columns.tolist()
+    
+            # Define the ColumnTransformer for preprocessing.
+            self.preprocessor = ColumnTransformer(
+                transformers=[
+                    ('num', MinMaxScaler(), numerical_features),
+                    ('cat', OneHotEncoder(), categorical_features)
+                    ]
+                    )
+            
+            # Apply the preprocessing on the training and test data.
+            X_train_preprocessed = self.preprocessor.fit_transform(X_train)
+            X_test_preprocessed = self.preprocessor.transform(X_test)
 
-
-        return X_train_preprocessed, y_train, X_test_preprocessed, y_test 
+            return X_train_preprocessed, y_train, X_test_preprocessed, y_test 
 
     
     def train(self, df: pd.DataFrame, cols_to_drop: List, target_column: str, test_size: int = 0.15):
@@ -119,7 +141,7 @@ class TastyModel:
         """
         
         # Retrieve the preprocessed data.
-        X_train, y_train, X_test, y_test = self.preprocess(df, cols_to_drop, target_column, test_size)
+        X_train, y_train, X_test, y_test = self.preprocess(df, cols_to_drop, target_column, test_size, cv=False)
 
         # Fit the model on the training data.
         self.model.fit(X_train, y_train)
@@ -188,16 +210,15 @@ class TastyModel:
         """
 
         # Retrieve the preprocessed data.
-        X_train, y_train, X_test, y_test = self.preprocess(df, cols_to_drop, target_column, test_size=0)
+        X, y = self.preprocess(df, cols_to_drop, target_column, test_size=1, cv=True)
 
         # Perform cross-validation.
-        scores = cross_val_score(self.model, X_train, y_train, cv=cv)
+        scores = cross_val_score(self.model, X, y, cv=cv)
 
         # Print cross-validation scores.
         print(f"Cross-validation scores: {scores}")
         print(f"Mean cross-validation score: {np.mean(scores):.4f}")
 
-        
 
     def feature_importance(self, ):
         """
@@ -249,13 +270,15 @@ class TastyModel:
         Returns:
             None
         """
+        
+        if self.model and self.preprocessor:
 
-        if self.model:
-            joblib.dump(self.model, filename)
-            print(f"Model saved to {filename}")
-
+            # Save both the model and the preprocessor as a dictionary.
+            joblib.dump({'model': self.model, 'preprocessor': self.preprocessor}, filename)
+            print(f"Model and preprocessor saved to {filename}")
+    
         else:
-            print("No trained model found to save.")
+            print("Model and/or preprocessor not found. Ensure both are set before saving.")
 
 
     def load_model(self, filename: Union[Path, str]):
@@ -272,14 +295,22 @@ class TastyModel:
         """
 
         try:
-            self.model = joblib.load(filename)
-            print(f"Model loaded from {filename}")
+
+            # Load the dictionary containing the model and preprocessor.
+            loaded_data = joblib.load(filename)
+            self.model = loaded_data['model']
+            self.preprocessor = loaded_data['preprocessor']
+            print(f"Model and preprocessor loaded successfully from {filename}")
+
         except FileNotFoundError:
             print(f"File not found: {filename}")
+        
+        except KeyError:
+            print("The loaded file does not contain both model and preprocessor.")
+
         except Exception as e:
             print(f"An error occurred while loading the model: {e}")
 
-    
 
     def predict_traffic_increase(self, calories: float, carbohydrate: float, sugar: float, 
                                  protein: float, category: str, servings: int) -> Tuple[str, float]:
@@ -324,4 +355,21 @@ class TastyModel:
         # Categorize the traffic impact.
         traffic_category = "High Traffic" if prediction == 1 else "Low Traffic"
 
-        return traffic_category, prediction_probability
+        if traffic_category == "High Traffic":
+
+            return traffic_category, prediction_probability
+        
+        elif traffic_category == "Low Traffic":
+            prediction_probability = 1 - prediction_probability
+
+            return traffic_category, prediction_probability
+
+        
+
+# Initialize Logistic Regression model.
+tasty = TastyModel()
+
+# Load the saved model.
+tasty.load_model(filename="tasty_model1")
+
+tasty.predict_traffic_increase(35.48, 38.56,0.66,0.92,"Potato",4,)
