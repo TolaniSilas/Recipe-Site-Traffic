@@ -1,8 +1,12 @@
+import os
 import sys
-import os 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+
+# Add the project root directory to the Python path.
+project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # Go up three levels
+sys.path.append(project_root)
+
+from src.model import TastyModel
 from fastapi import FastAPI, HTTPException, Request
-from src import TastyModel
 from schemas import PredictionInput
 
 
@@ -55,8 +59,21 @@ async def recipe_type(request: PredictionInput):
         category = request.category
         servings = request.servings
 
-        # Initialize the Tasty Bytes model.
+
+        # Construct the absolute path to the "models" directory.
+        model_path = os.path.join(project_root, "models", "tasty_model1.joblib")
+
+        # Initialize the trained Tasty Model.
         model = TastyModel()
+
+        try:
+            # Load the model.
+            model.load_model(filename=model_path)
+            print("Model loaded successfully!")
+        except FileNotFoundError:
+            print("Model file not found. Check the file path.")
+        except Exception as e:
+            print(f"An error occurred: {e}")
 
         # Generate recipe traffic prediction and probability.
         traffic_category, prediction_probability = model.predict_traffic_increase(

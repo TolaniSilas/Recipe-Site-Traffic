@@ -1,1 +1,2 @@
-from .model.TastyBytesModel import TastyModel
+# src/model/__init__.py
+

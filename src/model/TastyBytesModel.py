@@ -366,10 +366,10 @@ class TastyModel:
 
         
 
-# Initialize Logistic Regression model.
-tasty = TastyModel()
+# # Initialize the trained Tasty Model.
+# model = TastyModel()
 
-# Load the saved model.
-tasty.load_model(filename="tasty_model1")
+# # Load the saved model.
+# model.load_model(filename="tasty_model1")
 
-tasty.predict_traffic_increase(35.48, 38.56,0.66,0.92,"Potato",4,)
+# model.predict_traffic_increase(35.48, 38.56,0.66,0.92,"Potato",4,)
