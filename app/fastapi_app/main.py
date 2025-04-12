@@ -8,6 +8,7 @@ sys.path.append(project_root)
 from src.model import TastyModel
 from fastapi import FastAPI, HTTPException, Request
 from schemas import PredictionInput
+from decimal import Decimal
 
 
 # Instantiate the FastAPI application.
@@ -85,11 +86,10 @@ async def recipe_type(request: PredictionInput):
             servings=servings
         )
         
-        # Prepare the response in a serializable format.
         response = {
             "prediction": str(traffic_category),
-            "probability": float(prediction_probability)
-        }
+            "probability": float(Decimal(prediction_probability).quantize(Decimal("0.01")))  # Round to 2 decimal places
+            }
         
         # Return the result as a JSON response.
         return response
