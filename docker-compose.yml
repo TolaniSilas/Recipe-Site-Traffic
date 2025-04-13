@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+  api-dev:
+    build:
+      context: ./app/api_dev
+    ports:
+      - "8000:8000"
+    volumes:
+      - 
+
