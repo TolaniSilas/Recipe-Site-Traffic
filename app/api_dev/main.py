@@ -7,12 +7,22 @@ sys.path.append(project_root)
 
 from src.model import TastyModel
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
 from schemas import PredictionInput
 from decimal import Decimal
 
 
 # Instantiate the FastAPI application.
 app = FastAPI()
+
+# Add CORS middleware.
+app.add_middle_ware(
+    CORSMiddleware, 
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 
 # Define a GET endpoint for the health check.
