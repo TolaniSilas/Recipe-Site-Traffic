@@ -16,7 +16,7 @@ from decimal import Decimal
 app = FastAPI()
 
 # Add CORS middleware.
-app.add_middle_ware(
+app.add_middleware(
     CORSMiddleware, 
     allow_origins=["http://localhost:3000"],
     allow_credentials=True,
