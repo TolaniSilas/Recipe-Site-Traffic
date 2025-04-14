@@ -11,7 +11,10 @@ function App() {
     servings: "",
   });
 
-  const [prediction, setPrediction] = useState(null);
+  const [responseData, setResponseData] = useState({
+    prediction: null,
+    trafficProbability: null,
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,7 +30,10 @@ function App() {
         body: JSON.stringify(formData),
       });
       const data = await response.json();
-      setPrediction(data.result);
+      setResponseData({
+        prediction: data.prediction,
+        trafficProbability: data.trafficProbability,
+      });
     } catch (error) {
       console.error("Error:", error);
     }
@@ -81,7 +87,12 @@ function App() {
         />
         <button type="submit">Predict</button>
       </form>
-      {prediction && <p>Prediction: {prediction}</p>}
+      {responseData.prediction && (
+        <div>
+          <p>Prediction: {responseData.prediction}</p>
+          <p>Traffic Probability: {responseData.trafficProbability}</p>
+        </div>
+      )}
     </div>
   );
 }
