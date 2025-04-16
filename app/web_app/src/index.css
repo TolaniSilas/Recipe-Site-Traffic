@@ -1,8 +1,9 @@
+/* Global font styles */
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Roboto', sans-serif; /* Default font for body text */
+  line-height: 1.6; /* Improve readability */
+  color: #333; /* Dark text for better contrast */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -10,4 +11,23 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', serif; /* Elegant font for headings */
+  color: #222; /* Slightly darker color for headings */
+}
+
+a {
+  font-family: 'Roboto', sans-serif; /* Ensure links use the body font */
+  color: #08bfad; /* Brand color for links */
+  text-decoration: none;
+}
+
+a:hover {
+  color: #0ec3f0; /* Lighter hover color for links */
+}
+
+button {
+  font-family: 'Roboto', sans-serif; /* Ensure buttons use the body font */
 }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Pie } from "react-chartjs-2";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css"; // Import Bootstrap Icons
-import "./App.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js"; // Import Bootstrap JavaScript
 
 function App() {
   // State for form data
@@ -120,44 +120,207 @@ function App() {
   return (
     <div className={darkMode ? "bg-dark text-white" : "bg-light text-dark"}>
       {/* Header Bar */}
-      <header className="container-fluid py-3 bg-primary text-white d-flex justify-content-between align-items-center">
-        <span className="fs-3 fw-bold">TastyBytes</span>
-        <div>
-          <a href="#prediction" className="text-white me-3 text-decoration-none">
-            Run Prediction
+      <nav className="navbar navbar-expand-lg" style={{ backgroundColor: "#08bfad" }}>
+        <div className="container">
+          {/* TastyBytes Logo */}
+          <a className="navbar-brand text-white fs-3 fw-bold" href="#" style={{ fontFamily: 'Playfair Display, serif' }}>
+            TastyBytes
           </a>
-          <a href="#about" className="text-white me-3 text-decoration-none">
-            About
-          </a>
-          <button
-            className="btn btn-link text-white text-decoration-none"
-            onClick={toggleDarkMode}
-            style={{ fontSize: "1.5rem" }}
+
+          {/* Mobile View: Toggle Button and Dark Mode */}
+          <div className="d-lg-none d-flex align-items-center">
+            <button
+              className="btn btn-link text-white text-decoration-none me-3"
+              onClick={toggleDarkMode}
+              style={{ fontSize: "1.5rem" }}
+            >
+              <i className={darkMode ? "bi bi-sun-fill" : "bi bi-moon-fill"}></i>
+            </button>
+            <button
+              className="navbar-toggler"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasNavbar"
+              aria-controls="offcanvasNavbar"
+              style={{
+                borderColor: "white",
+                fontSize: "0.8rem",
+              }}
+              onMouseOver={(e) => (e.target.style.backgroundColor = "#0ec3f0")}
+              onMouseOut={(e) => (e.target.style.backgroundColor = "transparent")}
+            >
+              <span className="navbar-toggler-icon"></span>
+            </button>
+          </div>
+
+          {/* Large Screen: Inline Navigation */}
+          <div className="collapse navbar-collapse d-none d-lg-flex justify-content-end align-items-center">
+            <ul className="navbar-nav d-flex align-items-center">
+              <li className="nav-item me-2">
+                <a
+                  href="#prediction"
+                  className="btn"
+                  style={{
+                    backgroundColor: "#09a5ed", // Button background color
+                    color: "white", // Text color
+                    border: "none",
+                    padding: "7px 15px",
+                    borderRadius: "6px",
+                  }}
+                >
+                  Run Prediction
+                </a>
+              </li>
+              <li className="nav-item me-2">
+                <a
+                  href="#about"
+                  className="btn"
+                  style={{
+                    backgroundColor: "#09a5ed", // Button background color
+                    color: "white", // Text color
+                    border: "none",
+                    padding: "7px 15px",
+                    borderRadius: "6px",
+                  }}
+                >
+                  About
+                </a>
+              </li>
+              <li className="nav-item">
+                <button
+                  className="btn btn-link text-white text-decoration-none"
+                  onClick={toggleDarkMode}
+                  style={{ fontSize: "1.5rem" }}
+                >
+                  <i className={darkMode ? "bi bi-sun-fill" : "bi bi-moon-fill"}></i>
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          {/* Offcanvas Menu for Mobile */}
+          <div
+            className={`offcanvas offcanvas-end d-lg-none ${darkMode ? "bg-dark text-white" : "bg-light text-dark"}`}
+            tabIndex="-1"
+            id="offcanvasNavbar"
+            aria-labelledby="offcanvasNavbarLabel"
+            style={{
+              width: "80%",
+              height: "90%",
+              transition: "transform 0.3s ease-in-out", // Faster transition (0.3s)
+            }}
           >
-            <i className={darkMode ? "bi bi-sun-fill" : "bi bi-moon-fill"}></i>
-          </button>
+            <div className="offcanvas-header" style={{ backgroundColor: "#08bfad" }}>
+              <h5 className="offcanvas-title text-white" id="offcanvasNavbarLabel">
+                Menu
+              </h5>
+              <button
+                type="button"
+                className="btn-close text-reset"
+                data-bs-dismiss="offcanvas"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="offcanvas-body d-flex flex-column align-items-center">
+              <ul className="navbar-nav w-100">
+                <li className="nav-item mb-3 text-center">
+                  <a
+                    href="#prediction"
+                    className="btn"
+                    style={{
+                      backgroundColor: "#09a5ed", // Button background color
+                      color: "white", // Text color
+                      border: "none",
+                      padding: "10px 15px", // Adjust padding for smaller buttons
+                      borderRadius: "4px",
+                    }}
+                  >
+                    Run Prediction
+                  </a>
+                </li>
+                <li className="nav-item mb-3 text-center">
+                  <a
+                    href="#about"
+                    className="btn"
+                    style={{
+                      backgroundColor: "#09a5ed", // Button background color
+                      color: "white", // Text color
+                      border: "none",
+                      padding: "10px 15px", // Adjust padding for smaller buttons
+                      borderRadius: "4px",
+                    }}
+                  >
+                    About
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
-      </header>
+      </nav>
 
       {/* Hero Section */}
       <section className="container text-center my-5">
-        <h2>Welcome to TastyBytes</h2>
-        <p>Your go-to app for predicting recipe traffic and analyzing recipe data.</p>
+        <h2 className="animate__animated animate__fadeInDown">Welcome to TastyBytes</h2>
+        <p className="animate__animated animate__fadeInUp">
+          Your go-to app for predicting recipe traffic and analyzing recipe data.
+        </p>
         <img
-          src="https://via.placeholder.com/600x300" // Replace with your image URL
+          src="https://dribbble.com/shots/25339033-Mingola-Bakery-Logo-Design-Branding?utm_source=Clipboard_Shot&utm_campaign=Aditya-Chhatrala&utm_content=Mingola%20Bakery%20Logo%20Design%20%26%20Branding&utm_medium=Social_Share&utm_source=Clipboard_Shot&utm_campaign=Aditya-Chhatrala&utm_content=Mingola%20Bakery%20Logo%20Design%20%26%20Branding&utm_medium=Social_Share"
           alt="Recipe Types"
-          className="img-fluid rounded shadow"
+          className="img-fluid rounded shadow animate__animated animate__zoomIn"
         />
       </section>
 
       {/* About Section */}
-      <section id="about" className="container my-5 p-4" style={{ backgroundColor: "#f8f9fa" }}>
-        <h2>About TastyBytes</h2>
-        <p>
-          TastyBytes is a powerful tool designed to predict recipe traffic and provide insights into recipe performance. 
-          This project contributes to the food industry by helping chefs, bloggers, and food enthusiasts understand 
-          which recipes are likely to attract more traffic.
-        </p>
+      <section id="about" className="py-5 bg-white px-3 px-md-5">
+        <div className="container text-center">
+          <h2 className="text-primary fw-bold mb-4 animate__animated animate__fadeInDown">About Tasty Bytes</h2>
+          <p className="text-secondary fs-5 animate__animated animate__fadeInUp">
+            Tasty Bytes is a powerful, data-driven platform built to predict recipe traffic and uncover actionable insights into recipe performance. Our mission is to empower decision-makers in the food industry with the intelligence they need to spotlight recipes that truly resonate with users.
+          </p>
+
+          <div className="row row-cols-1 row-cols-md-3 g-4 mt-5 text-start">
+            {/* Challenge */}
+            <div
+              className="col p-3 animate__animated animate__fadeInLeft"
+              style={{
+                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // Box shadow for depth
+              }}
+            >
+              <h3 className="text-warning fw-bold">🎯 The Challenge</h3>
+              <p className="text-muted mt-2">
+                Selecting which recipes to feature has often relied on guesswork or random choices, leading to poor performance and missed opportunities. The lack of a structured, predictive approach resulted in inconsistent user engagement and ineffective homepage content.
+              </p>
+            </div>
+
+            {/* Solution */}
+            <div
+              className="col p-3 animate__animated animate__fadeInUp"
+              style={{
+                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // Box shadow for depth
+              }}
+            >
+              <h3 className="text-success fw-bold">🤖 The Solution</h3>
+              <p className="text-muted mt-2">
+                Tasty Bytes leverages machine learning to accurately predict which types of recipes are most likely to attract high user traffic. By analyzing historical data and identifying performance trends, it replaces guesswork with smart, data-backed decision-making.
+              </p>
+            </div>
+
+            {/* Result */}
+            <div
+              className="col p-3 animate__animated animate__fadeInRight"
+              style={{
+                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // Box shadow for depth
+              }}
+            >
+              <h3 className="text-danger fw-bold">🚀 The Result</h3>
+              <p className="text-muted mt-2">
+                With Tasty Bytes, chefs, stakeholders, product managers, bloggers, and food brands can confidently choose recipes that drive engagement and grow subscriber bases. The result? More informed decisions, better-performing homepages, and a delicious increase in traffic.
+              </p>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Prediction Section */}
@@ -241,13 +404,16 @@ function App() {
       </section>
 
       {/* Footer */}
-      <footer className="text-center py-3" style={{ backgroundColor: "#343a40", color: "white" }}>
-        <p>Recipe Traffic Prediction App © 2025</p>
-        <p>Powered by FastAPI and React</p>
+      <footer
+        className="text-center py-3"
+        style={{ backgroundColor: "#08bfad", color: "white" }}
+      >
+        <p>
+          Tasty Bytes | Powered by FastAPI and React
+        </p>
       </footer>
     </div>
   );
 }
 
 export default App;
-
