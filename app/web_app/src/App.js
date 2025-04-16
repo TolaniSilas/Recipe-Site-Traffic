@@ -325,84 +325,89 @@ function App() {
 
       {/* Prediction Section */}
       <section id="prediction" className="container my-5">
-        <h2>Run a Prediction</h2>
-        <form className="p-4 bg-light rounded shadow" onSubmit={handleSubmit}>
-          <input
-            className="form-control mb-3"
-            type="text"
-            name="calories"
-            placeholder="Calories"
-            value={formData.calories}
-            onChange={handleChange}
-            title="Enter the number of calories in the recipe (e.g., 200)"
-          />
-          <input
-            className="form-control mb-3"
-            type="text"
-            name="carbohydrate"
-            placeholder="Carbohydrate"
-            value={formData.carbohydrate}
-            onChange={handleChange}
-            title="Enter the amount of carbohydrates in grams (e.g., 50)"
-          />
-          <input
-            className="form-control mb-3"
-            type="text"
-            name="sugar"
-            placeholder="Sugar"
-            value={formData.sugar}
-            onChange={handleChange}
-            title="Enter the amount of sugar in grams (e.g., 20)"
-          />
-          <input
-            className="form-control mb-3"
-            type="text"
-            name="protein"
-            placeholder="Protein"
-            value={formData.protein}
-            onChange={handleChange}
-            title="Enter the amount of protein in grams (e.g., 10)"
-          />
-          <input
-            className="form-control mb-3"
-            type="text"
-            name="category"
-            placeholder="Category"
-            value={formData.category}
-            onChange={handleChange}
-            title="Enter the recipe category (e.g., Dessert)"
-          />
-          <input
-            className="form-control mb-3"
-            type="text"
-            name="servings"
-            placeholder="Servings"
-            value={formData.servings}
-            onChange={handleChange}
-            title="Enter the number of servings (e.g., 4)"
-          />
-          <button className="btn btn-primary" type="submit">
-            Predict
-          </button>
-          <button className="btn btn-secondary ms-2" type="button" onClick={handleClear}>
-            Clear
-          </button>
-        </form>
-
-        {isLoading && <p className="text-center mt-3">Loading...</p>}
-        {errorMessage && <p className="text-danger text-center mt-3">{errorMessage}</p>}
-        {responseData.prediction && (
-          <div className="mt-4 text-center">
-            <h3>Prediction Results</h3>
-            <p><strong>Prediction:</strong> {responseData.prediction}</p>
-            <p><strong>Traffic Probability:</strong> {responseData.trafficProbability}</p>
-            <div className="mt-4">
-              <Pie data={chartData} />
-            </div>
+        <div className="row justify-content-center">
+          <div className="col-lg-6 col-md-8 col-sm-10">
+            <h2 className="text-center mb-4">Run a Prediction</h2>
+            <form className="p-4 bg-light rounded shadow" onSubmit={handleSubmit}>
+              <input
+                className="form-control mb-3"
+                type="text"
+                name="calories"
+                placeholder="Calories"
+                value={formData.calories}
+                onChange={handleChange}
+                title="Enter the number of calories in the recipe (e.g., 200)"
+              />
+              <input
+                className="form-control mb-3"
+                type="text"
+                name="carbohydrate"
+                placeholder="Carbohydrate"
+                value={formData.carbohydrate}
+                onChange={handleChange}
+                title="Enter the amount of carbohydrates in grams (e.g., 50)"
+              />
+              <input
+                className="form-control mb-3"
+                type="text"
+                name="sugar"
+                placeholder="Sugar"
+                value={formData.sugar}
+                onChange={handleChange}
+                title="Enter the amount of sugar in grams (e.g., 20)"
+              />
+              <input
+                className="form-control mb-3"
+                type="text"
+                name="protein"
+                placeholder="Protein"
+                value={formData.protein}
+                onChange={handleChange}
+                title="Enter the amount of protein in grams (e.g., 10)"
+              />
+              <input
+                className="form-control mb-3"
+                type="text"
+                name="category"
+                placeholder="Category"
+                value={formData.category}
+                onChange={handleChange}
+                title="Enter the recipe category (e.g., Dessert)"
+              />
+              <input
+                className="form-control mb-3"
+                type="text"
+                name="servings"
+                placeholder="Servings"
+                value={formData.servings}
+                onChange={handleChange}
+                title="Enter the number of servings (e.g., 4)"
+              />
+              <div className="text-center">
+                <button className="btn btn-primary" type="submit">
+                  Predict
+                </button>
+                <button className="btn btn-secondary ms-2" type="button" onClick={handleClear}>
+                  Clear
+                </button>
+              </div>
+            </form>
           </div>
-        )}
+        </div>
       </section>
 
+      {isLoading && <p className="text-center mt-3">Loading...</p>}
+      {errorMessage && <p className="text-danger text-center mt-3">{errorMessage}</p>}
+      {responseData.prediction && (
+        <div className="mt-4 text-center">
+          <h3>Prediction Results</h3>
+          <p><strong>Prediction:</strong> {responseData.prediction}</p>
+          <p><strong>Traffic Probability:</strong> {responseData.trafficProbability}</p>
+          <div className="mt-4">
+            <Pie data={chartData} />
+          </div>
+        </div>
+      )}
       {/* Footer */}
       <footer
         className="text-center py-3"
