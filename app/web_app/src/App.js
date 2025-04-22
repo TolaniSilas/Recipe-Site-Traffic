@@ -398,16 +398,7 @@ function App() {
 
       {isLoading && <p className="text-center mt-3">Loading...</p>}
       {errorMessage && <p className="text-danger text-center mt-3">{errorMessage}</p>}
-      {responseData.prediction && (
-        <div className="mt-4 text-center">
-          <h3>Prediction Results</h3>
-          <p><strong>Prediction:</strong> {responseData.prediction}</p>
-          <p><strong>Traffic Probability:</strong> {responseData.trafficProbability}</p>
-          <div className="mt-4">
-            <Pie data={chartData} />
-          </div>
-        </div>
-      )}
+      {<p>console.log(responseData)</p>}
       {/* Footer */}
       <footer
         className="text-center py-3"
