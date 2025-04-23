@@ -98,7 +98,7 @@ async def recipe_type(request: PredictionInput):
         
         response = {
             "prediction": str(traffic_category),
-            "probability": float(Decimal(prediction_probability).quantize(Decimal("0.01")))  # Round to 2 decimal places
+            "trafficProbability": float(Decimal(prediction_probability).quantize(Decimal("0.01")))  # Round to 2 decimal places
             }
         
         # Return the result as a JSON response.

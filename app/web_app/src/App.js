@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Pie } from "react-chartjs-2";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap-icons/font/bootstrap-icons.css"; // Import Bootstrap Icons
-import "bootstrap/dist/js/bootstrap.bundle.min.js"; // Import Bootstrap JavaScript
+import "bootstrap-icons/font/bootstrap-icons.css"; 
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import {Chart as ChartJS, ArcElement, Tooltip, Legend} from "chart.js";
+
+// Register the required components.
+ChartJS.register(ArcElement, Tooltip, Legend);
+
 
 function App() {
   // State for form data
@@ -57,14 +62,21 @@ function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
+    
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
+
       setResponseData({
         prediction: data.prediction,
         trafficProbability: data.trafficProbability,
       });
+
+      // Show the modal. 
+      const modal = new window.bootstrap.Modal(document.getElementById("predictionModal"));
+      modal.show();
+
     } catch (error) {
       setErrorMessage("Failed to fetch prediction. Please try again.");
       console.error("Error:", error);
@@ -398,7 +410,49 @@ function App() {
 
       {isLoading && <p className="text-center mt-3">Loading...</p>}
       {errorMessage && <p className="text-danger text-center mt-3">{errorMessage}</p>}
-      {<p>console.log(responseData)</p>}
+
+      {/* Modal for Prediction Results */}
+      <div
+        className="modal fade"
+        id="predictionModal"
+        tabIndex="-1"
+        aria-labelledby="predictionModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="predictionModalLabel">Prediction Results</h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              {!isLoading && !errorMessage && responseData.trafficProbability !== null && (
+                <div className="container my-5 text-center">
+                  <h3>Prediction Results</h3>
+                  <p>
+                    The traffic is predicted to be{" "}
+                    <strong>
+                      {responseData.prediction}
+                    </strong>{" "}
+                    with a probability of{" "}
+                    <strong>{(responseData.trafficProbability * 100).toFixed(2)}%</strong>.
+                  </p>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+                  <div className="my-4" style={{ width: "300px", height: "300px", margin: "0 auto" }}>
+                    <Pie data={chartData} />
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+  
       {/* Footer */}
       <footer
         className="text-center py-3"
