@@ -268,30 +268,30 @@ function App() {
 
       {/* Hero Section */}
       <section className="container text-center my-5" data-aos="fade-up">
-        <h2 className="animate__animated animate__fadeInDown">Welcome to TastyBytes</h2>
-        <p className="animate__animated animate__fadeInUp">
+        <h2 className="">Welcome to TastyBytes</h2>
+        <p className="">
           Your go-to app for predicting recipe traffic and analyzing recipe data.
         </p>
         <img
-          src="https://dribbble.com/shots/25339033-Mingola-Bakery-Logo-Design-Branding?utm_source=Clipboard_Shot&utm_campaign=Aditya-Chhatrala&utm_content=Mingola%20Bakery%20Logo%20Design%20%26%20Branding&utm_medium=Social_Share&utm_source=Clipboard_Shot&utm_campaign=Aditya-Chhatrala&utm_content=Mingola%20Bakery%20Logo%20Design%20%26%20Branding&utm_medium=Social_Share"
+          src="https://dribbble.com/shots/253re"
           alt="Recipe Types"
-          className="img-fluid rounded shadow animate__animated animate__zoomIn"
+          className="img-fluid rounded shadow"
         />
       </section>
 
       {/* About Section */}
       <section id="about" className="py-5 bg-white px-3 px-md-5" data-aos="fade-right">
         <div className="container text-center">
-          <h2 className="fw-bold mb-4 animate__animated animate__fadeInDown" style={{ color: "#19e6df" }}>
+          <h2 className="fw-bold mb-4" style={{ color: "#19e6df" }}>
             About Tasty Bytes
           </h2>
-          <p className="text-secondary fs-5 animate__animated animate__fadeInUp">
+          <p className="text-secondary fs-5">
             Tasty Bytes is a powerful, data-driven platform built to predict recipe traffic and uncover actionable insights into recipe performance. Our mission is to empower decision-makers in the food industry with the intelligence they need to spotlight recipes that truly resonate with users.
           </p>
 
           <div className="d-flex flex-wrap justify-content-center gap-4 mt-5 text-start">
             {/* Challenge */}
-            <div className="about-card p-3 animate__animated animate__fadeInLeft" data-aos="fade-left">
+            <div className="about-card p-3" data-aos="fade-left">
               <h3 className="text-warning fw-bold">🎯 The Challenge</h3>
               <p className="text-muted mt-2" style={{ fontSize: "0.8rem" }}>
                 Selecting which recipes to feature has often relied on guesswork or random choices, leading to poor performance and missed opportunities. The lack of a structured, predictive approach resulted in inconsistent user engagement and ineffective homepage content.
@@ -299,7 +299,7 @@ function App() {
             </div>
 
             {/* Solution */}
-            <div className="about-card p-3 animate__animated animate__fadeInUp" data-aos="fade-up">
+            <div className="about-card p-3" data-aos="fade-up">
               <h3 className="text-success fw-bold">🤖 The Solution</h3>
               <p className="text-muted mt-2" style={{ fontSize: "0.8rem" }}>
                 Tasty Bytes leverages machine learning to accurately predict which types of recipes are most likely to attract high user traffic. By analyzing historical data and identifying performance trends, it replaces guesswork with smart, data-backed decision-making.
@@ -307,7 +307,7 @@ function App() {
             </div>
 
             {/* Result */}
-            <div className="about-card p-3 animate__animated animate__fadeInRight" data-aos="fade-right">
+            <div className="about-card p-3" data-aos="fade-right">
               <h3 className="text-danger fw-bold">🚀 The Result</h3>
               <p className="text-muted mt-2" style={{ fontSize: "0.8rem" }}>
                 With Tasty Bytes, chefs, stakeholders, product managers, bloggers, and food brands can confidently choose recipes that drive engagement and grow subscriber bases. The result? More informed decisions, better-performing homepages, and a delicious increase in traffic.
