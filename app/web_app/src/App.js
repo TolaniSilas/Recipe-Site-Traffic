@@ -36,8 +36,8 @@ function App() {
   // Initialize AOS
   useEffect(() => {
     AOS.init({
-      duration: 1250, // Animation duration in milliseconds
-      once: false, // Whether animation should happen only once
+      duration: 1150, // Animation duration in milliseconds
+      once: true, // Whether animation should happen only once
     });
   }, []);
 
@@ -269,13 +269,27 @@ function App() {
       {/* Hero Section */}
       <section className="hero-section text-center py-5" data-aos="fade-up">
         <div className="container">
-          <h2 className="fw-bold display-4" style={{ color: "#08bfad" }}>
-            Discover the Power of Recipe Insights
-          </h2>
-          <p className="text-secondary fs-5 mt-3">
-            Your go-to app for predicting recipe traffic and analyzing recipe data.
-          </p>
-       
+          <div className="row align-items-center">
+            {/* Text Content */}
+            <div className="col-md-6 text-md-start">
+              <h2 className="fw-bold display-4" style={{ color: "#08bfad" }}>
+                Discover the Power of Recipe Insights
+              </h2>
+              <p className="text-secondary fs-5 mt-3" style={{ color: "#ffffff"}}>
+                Your go-to app for predicting recipe traffic and analyzing recipe data.
+              </p>
+            </div>
+
+            {/* Image Content */}
+            <div className="col-md-6 text-center">
+              <img
+                src="/images/hero-image.jpeg"
+                alt="Hero Illustration"
+                className="img-fluid rounded shadow"
+                style={{ maxWidth: "100%", height: "auto" }}
+              />
+            </div>
+          </div>
         </div>
       </section>
 

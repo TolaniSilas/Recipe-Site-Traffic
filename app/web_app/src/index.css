@@ -54,6 +54,46 @@ button {
   color: #08fff7;
 }
 
+/* Hero Section Styling */
+.hero-section {
+
+  color: white; /* Text color */
+  padding: 4rem 2rem; /* Padding for spacing */
+  overflow: hidden; /* Prevent content overflow */
+}
+
+.hero-section h2 {
+  font-size: 2.5rem; /* Adjust heading size */
+  line-height: 1.2; /* Improve readability */
+}
+
+.hero-section p {
+  font-size: 1.2rem; /* Slightly larger font size for the paragraph */
+  line-height: 1.6; /* Adjust line spacing */
+}
+
+.hero-section img {
+  max-width: 100%; /* Ensure the image fits within its container */
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 10px; /* Add rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .hero-section h2 {
+    font-size: 2rem; /* Reduce heading size for smaller screens */
+  }
+
+  .hero-section p {
+    font-size: 1rem; /* Reduce paragraph size for smaller screens */
+  }
+
+  .hero-section {
+    text-align: center; /* Center-align text for smaller screens */
+  }
+}
+
 /* Custom styles for the About Section cards */
 .about-card {
   flex: 1 1 calc(30% - 1.5rem); /* Each card takes 30% width minus the gap */
