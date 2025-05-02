@@ -18,6 +18,24 @@ h1, h2, h3, h4, h5, h6 {
   color: #222; /* Slightly darker color for headings */
 }
 
+p {
+   /* Align text for better readability */
+  line-height: 1.6; /* Adjust line spacing for readability */
+  margin-bottom: 1rem; /* Add spacing below each paragraph */
+  font-size: 1rem; /* Default font size for readability */
+  color: #555; /* Softer text color for better contrast */
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Responsive Adjustments for Paragraphs */
+@media (max-width: 576px) {
+  p {
+    font-size: 0.9rem; /* Slightly smaller font size for mobile */
+    line-height: 1.4; /* Reduce line spacing for compact screens */
+  }
+}
+
+
 a {
   font-family: 'Montserrat', sans-serif; /* Ensure links use the body font */
   color: #08bfad; /* Brand color for links */
@@ -62,5 +80,33 @@ button {
 @media (min-width: 1200px) {
   .about-card {
     width: 28%; /* Slightly smaller width for extra-large screens */
+  }
+}
+
+.container {
+  max-width: 800px; /* Limit the width of the container */
+  margin: 0 auto; /* Center the container */
+  padding: 1rem 2rem; /* Add padding for better spacing */
+}
+
+/* About Description Styling */
+.about-description {
+  text-align: start; /* Align text for better readability */
+  line-height: 1.4; /* Adjust line spacing for readability */
+  font-size: 1rem; /* Default font size for readability */
+  color: #555; /* Softer text color for better contrast */
+}
+
+/* Highlighted Text */
+.about-description .text-highlight {
+  font-weight: bold; /* Make highlighted text bold */
+  color: #08bfad; /* Use brand color for emphasis */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 576px) {
+  .about-description {
+    font-size: 0.9rem; /* Slightly smaller font size for mobile */
+    line-height: 1.2; /* Reduce line spacing for compact screens */
   }
 }

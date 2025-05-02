@@ -130,7 +130,7 @@ function App() {
       <nav className="navbar navbar-expand-lg" style={{ backgroundColor: "#08bfad" }}>
         <div className="container">
           {/* TastyBytes Logo */}
-          <a className="navbar-brand text-white fs-3 fw-bold" href="" style={{ fontFamily: 'Playfair Display, serif' }}>
+          <a className="navbar-brand text-white fs-3 fw-bold" href="#silas" style={{ fontFamily: 'Playfair Display, serif' }}>
             TastyBytes
           </a>
 
@@ -267,16 +267,16 @@ function App() {
       </nav>
 
       {/* Hero Section */}
-      <section className="container text-center my-5" data-aos="fade-up">
-        <h2 className="">Welcome to TastyBytes</h2>
-        <p className="">
-          Your go-to app for predicting recipe traffic and analyzing recipe data.
-        </p>
-        <img
-          src="https://dribbble.com/shots/253re"
-          alt="Recipe Types"
-          className="img-fluid rounded shadow"
-        />
+      <section className="hero-section text-center py-5" data-aos="fade-up">
+        <div className="container">
+          <h2 className="fw-bold display-4" style={{ color: "#08bfad" }}>
+            Discover the Power of Recipe Insights
+          </h2>
+          <p className="text-secondary fs-5 mt-3">
+            Your go-to app for predicting recipe traffic and analyzing recipe data.
+          </p>
+       
+        </div>
       </section>
 
       {/* About Section */}
@@ -285,8 +285,9 @@ function App() {
           <h2 className="fw-bold mb-4" style={{ color: "#19e6df" }}>
             About Tasty Bytes
           </h2>
-          <p className="text-secondary fs-5">
-            Tasty Bytes is a powerful, data-driven platform built to predict recipe traffic and uncover actionable insights into recipe performance. Our mission is to empower decision-makers in the food industry with the intelligence they need to spotlight recipes that truly resonate with users.
+          <p className="text-secondary fs-5 about-description">
+            Tasty Bytes is a <span className="text-highlight">powerful, data-driven platform</span> built to predict recipe traffic and uncover actionable insights into recipe performance. 
+            <span className="text-highlight">Our mission</span> is to empower decision-makers in the food industry with the intelligence they need to spotlight recipes that truly resonate with users.
           </p>
 
           <div className="d-flex flex-wrap justify-content-center gap-4 mt-5 text-start">
