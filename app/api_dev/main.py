@@ -8,7 +8,7 @@ sys.path.append(project_root)
 from src.model import TastyModel
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from schemas import PredictionInput
+from app.api_dev.schemas import PredictionInput, PredictionOutput
 from decimal import Decimal
 
 
@@ -37,9 +37,9 @@ def health():
     return {"status": "Service is running!"}
 
 
-# Define a POST endpoint for predicting loan eligibility based on user information.
+# Define a POST endpoint for predicting recipe traffic based on user information.
 @app.post("/recipe_type")
-async def recipe_type(request: PredictionInput):
+async def recipe_type(request: PredictionInput) -> PredictionOutput:
     """
     Endpoint to predict whether a recipe will result in high or low traffic on the company's website.
 
@@ -53,15 +53,14 @@ async def recipe_type(request: PredictionInput):
             - Servings (int): The number of servings the recipe provides.
 
     Returns:
-        dict: A dictionary containing:
-            - prediction (str): "1.0" for high traffic, "0.0" for low traffic.
-            - probability (float): Probability of the predicted outcome.
+        PredictionOutput: prediction (traffic class) and trafficProbability (0-1).
 
     Raises:
         HTTPException: If an error occurs during the prediction process.
     """
 
     try:
+        
         # Extract user information from the request body.
         calories = request.calories
         carbohydrate = request.carbohydrate
@@ -69,7 +68,6 @@ async def recipe_type(request: PredictionInput):
         protein = request.protein
         category = request.category
         servings = request.servings
-
 
         # Construct the absolute path to the "models" directory.
         model_path = os.path.join(project_root, "models", "tasty_model1.joblib")
@@ -81,31 +79,32 @@ async def recipe_type(request: PredictionInput):
             # Load the model.
             model.load_model(filename=model_path)
             print("Model loaded successfully!")
+
         except FileNotFoundError:
             print("Model file not found. Check the file path.")
+
         except Exception as e:
             print(f"An error occurred: {e}")
 
         # Generate recipe traffic prediction and probability.
         traffic_category, prediction_probability = model.predict_traffic_increase(
-            calories=calories, 
-            carbohydrate=carbohydrate, 
+            calories=calories,
+            carbohydrate=carbohydrate,
             sugar=sugar,
-            protein=protein, 
-            category=category, 
-            servings=servings
+            protein=protein,
+            category=category,
+            servings=servings,
         )
-        
-        response = {
-            "prediction": str(traffic_category),
-            "trafficProbability": float(Decimal(prediction_probability).quantize(Decimal("0.01")))  # Round to 2 decimal places
-            }
-        
-        # Return the result as a JSON response.
-        return response
-        
+
+        #
+        probability = float(Decimal(prediction_probability).quantize(Decimal("0.01")))
+
+        return PredictionOutput(
+            prediction=str(traffic_category),
+            trafficProbability=probability,
+        )
+
     except Exception as e:
-        # Raise an HTTPException with status code 500 if an error occurs.
         raise HTTPException(status_code=500, detail=str(e))
 
 

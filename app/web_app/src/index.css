@@ -1,152 +1,372 @@
-/* Global font styles */
+/* ===== Design tokens ===== */
+:root {
+  --brand: #08bfad;
+  --brand-hover: #06a396;
+  --brand-light: #19e6df;
+  --accent: #09a5ed;
+  --accent-soft: #e8f7fc;
+  --bg: #f5f6f8;
+  --bg-card: #ffffff;
+  --text: #1a1a1a;
+  --text-muted: #555;
+  --border: #e0e0e0;
+  --shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --font-sans: "Poppins", sans-serif;
+  --font-display: "Playfair Display", serif;
+  --transition: 0.2s ease;
+}
+
+.app-shell[data-theme="dark"] {
+  --bg: #121212;
+  --bg-card: #1e1e1e;
+  --text: #f0f0f0;
+  --text-muted: #b0b0b0;
+  --border: #333;
+  --shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --accent-soft: rgba(9, 165, 237, 0.15);
+}
+
+.app-shell[data-theme="dark"],
+.app-shell[data-theme="dark"] .about-section,
+.app-shell[data-theme="dark"] .prediction-form,
+.app-shell[data-theme="dark"] .result-card,
+.app-shell[data-theme="dark"] .about-card {
+  background-color: var(--bg-card);
+  color: var(--text);
+}
+
+/* ===== Base ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  font-family: 'Montserrat', sans-serif; /* Default font for body text */
-  line-height: 1.6; /* Improve readability */
-  color: #333; /* Dark text for better contrast */
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text);
+  background-color: var(--bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color var(--transition), color var(--transition);
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Montserrat', sans-serif; /* Use Montserrat for headings */
-  color: #222; /* Slightly darker color for headings */
+  font-family: var(--font-display);
+  color: var(--text);
+  font-weight: 600;
 }
 
 p {
-   /* Align text for better readability */
-  line-height: 1.6; /* Adjust line spacing for readability */
-  margin-bottom: 1rem; /* Add spacing below each paragraph */
-  font-size: 1rem; /* Default font size for readability */
-  color: #555; /* Softer text color for better contrast */
-  font-family: 'Montserrat', sans-serif;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  color: var(--text-muted);
 }
-
-/* Responsive Adjustments for Paragraphs */
-@media (max-width: 576px) {
-  p {
-    font-size: 0.9rem; /* Slightly smaller font size for mobile */
-    line-height: 1.4; /* Reduce line spacing for compact screens */
-  }
-}
-
 
 a {
-  font-family: 'Montserrat', sans-serif; /* Ensure links use the body font */
-  color: #08bfad; /* Brand color for links */
+  color: var(--brand);
   text-decoration: none;
+  transition: color var(--transition);
 }
 
 a:hover {
-  color: #0ec3f0; /* Lighter hover color for links */
+  color: var(--brand-light);
 }
 
-button {
-  font-family: 'Montserrat', sans-serif; /* Ensure buttons use the body font */
+button, .btn {
+  font-family: var(--font-sans);
+  transition: transform var(--transition), box-shadow var(--transition);
 }
 
-.text-highlight {
-  color: #08fff7;
+button:active, .btn:active {
+  transform: scale(0.98);
 }
 
-/* Hero Section Styling */
+/* ===== App shell ===== */
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg);
+}
+
+/* ===== Nav (header follows theme; buttons retain brand color) ===== */
+.navbar-theme {
+  transition: background-color var(--transition), border-color var(--transition);
+}
+
+.app-shell[data-theme="light"] .navbar-theme {
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--border);
+}
+
+.app-shell[data-theme="dark"] .navbar-theme {
+  background-color: #0d0d0d;
+  border-bottom: 1px solid var(--border);
+}
+
+.app-shell[data-theme="light"] .navbar-theme .nav-brand {
+  color: #1a1a1a;
+}
+
+.app-shell[data-theme="dark"] .navbar-theme .nav-brand {
+  color: #ffffff;
+}
+
+.nav-brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+/* Buttons retain brand color in both themes */
+.nav-cta {
+  background: var(--brand);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  transition: background var(--transition);
+}
+
+.nav-cta:hover {
+  background: var(--brand-hover);
+  color: white;
+}
+
+.nav-theme-btn {
+  color: var(--brand) !important;
+}
+
+.nav-theme-btn:hover {
+  color: var(--brand-hover) !important;
+}
+
+.nav-toggler-btn {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+.nav-toggler-btn .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%2308bfad' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* Offcanvas header matches nav (white / black by theme) */
+.app-shell[data-theme="light"] .offcanvas-header-theme {
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--border);
+  color: #1a1a1a;
+}
+
+.app-shell[data-theme="dark"] .offcanvas-header-theme {
+  background-color: #0d0d0d;
+  border-bottom: 1px solid var(--border);
+  color: #ffffff;
+}
+
+
+/* ===== Hero ===== */
 .hero-section {
-
-  color: white; /* Text color */
-  padding: 4rem 2rem; /* Padding for spacing */
-  overflow: hidden; /* Prevent content overflow */
+  background: linear-gradient(135deg, var(--brand) 0%, var(--accent) 100%);
+  color: white;
+  padding: 4rem 2rem;
+  overflow: hidden;
 }
 
 .hero-section h2 {
-  font-size: 2.5rem; /* Adjust heading size */
-  line-height: 1.2; /* Improve readability */
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  line-height: 1.2;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .hero-section p {
-  font-size: 1.2rem; /* Slightly larger font size for the paragraph */
-  line-height: 1.6; /* Adjust line spacing */
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 1.1rem;
+  margin-bottom: 0;
 }
 
 .hero-section img {
-  max-width: 100%; /* Ensure the image fits within its container */
-  height: auto; /* Maintain aspect ratio */
-  border-radius: 10px; /* Add rounded corners */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-hover);
 }
 
-/* Responsive Adjustments */
 @media (max-width: 768px) {
-  .hero-section h2 {
-    font-size: 2rem; /* Reduce heading size for smaller screens */
-  }
-
-  .hero-section p {
-    font-size: 1rem; /* Reduce paragraph size for smaller screens */
-  }
-
   .hero-section {
-    text-align: center; /* Center-align text for smaller screens */
+    text-align: center;
+    padding: 3rem 1rem;
   }
 }
 
-/* Custom styles for the About Section cards */
+/* ===== About ===== */
+.about-section {
+  background: var(--bg-card);
+  color: var(--text);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  color: var(--brand);
+  font-weight: 700;
+}
+
 .about-card {
-  flex: 1 1 calc(30% - 1.5rem); /* Each card takes 30% width minus the gap */
-  min-width: 250px; /* Ensure cards don't shrink too much */
-  background-color: #f8f9fa; /* Light gray background for the card */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow for depth */
-  border-radius: 10px; /* Rounded corners */
-  padding: 1rem; /* Internal padding */
-  width: 100%; /* Default full width for mobile screens */
+  flex: 1 1 280px;
+  max-width: 360px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  transition: box-shadow var(--transition), transform var(--transition);
 }
 
-.d-flex {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem; /* Add spacing between elements */
+.about-card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
 }
 
-@media (min-width: 768px) {
-  .about-card {
-    width: 30%; /* 30% width for medium and larger screens */
-  }
+.about-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
 }
 
-@media (min-width: 1200px) {
-  .about-card {
-    width: 28%; /* Slightly smaller width for extra-large screens */
-  }
+.about-card p {
+  font-size: 0.9rem;
+  margin-bottom: 0;
+  color: var(--text-muted);
 }
 
-.container {
-  max-width: 800px; /* Limit the width of the container */
-  margin: 0 auto; /* Center the container */
-  padding: 1rem 2rem; /* Add padding for better spacing */
+.text-highlight {
+  color: var(--brand);
+  font-weight: 600;
 }
 
-/* About Description Styling */
-.about-description {
-  text-align: start; /* Align text for better readability */
-  line-height: 1.4; /* Adjust line spacing for readability */
-  font-size: 1rem; /* Default font size for readability */
-  color: #555; /* Softer text color for better contrast */
+/* ===== Form ===== */
+.prediction-form {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2rem;
 }
 
-/* Highlighted Text */
-.about-description .text-highlight {
-  font-weight: bold; /* Make highlighted text bold */
-  color: #08bfad; /* Use brand color for emphasis */
+.prediction-form .form-label {
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 0.35rem;
 }
 
-/* Responsive Adjustments */
+.prediction-form .form-control,
+.prediction-form .form-select {
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  padding: 0.6rem 0.85rem;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.prediction-form .form-control:focus,
+.prediction-form .form-select:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(8, 191, 173, 0.2);
+  outline: none;
+}
+
+.btn-predict {
+  background: var(--brand);
+  border: none;
+  color: white;
+  padding: 0.65rem 1.75rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+}
+
+.btn-predict:hover {
+  background: var(--brand-hover);
+  color: white;
+}
+
+.btn-clear {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 0.65rem 1.75rem;
+  border-radius: var(--radius-sm);
+}
+
+.btn-clear:hover {
+  background: var(--bg);
+  color: var(--text);
+  border-color: var(--text-muted);
+}
+
+/* ===== Results ===== */
+.result-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2rem;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.result-card .badge-traffic {
+  font-size: 1.1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+}
+
+.result-chart-wrap {
+  width: 280px;
+  height: 280px;
+  margin: 0 auto;
+}
+
+/* ===== Loading & error ===== */
+.loading-spinner {
+  color: var(--brand);
+}
+
+.alert-api {
+  border-radius: var(--radius-sm);
+  max-width: 32rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ===== Footer ===== */
+.footer-bar {
+  background: linear-gradient(135deg, var(--brand) 0%, var(--accent) 100%);
+  color: white;
+  margin-top: auto;
+}
+
+.footer-bar p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 0.9rem;
+}
+
+/* ===== Utilities ===== */
 @media (max-width: 576px) {
-  .about-description {
-    font-size: 0.9rem; /* Slightly smaller font size for mobile */
-    line-height: 1.2; /* Reduce line spacing for compact screens */
-  }
+  p { font-size: 0.9rem; }
+  .about-description { font-size: 0.9rem; }
 }

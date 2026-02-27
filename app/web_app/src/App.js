@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Pie } from "react-chartjs-2";
+import { Target, Bot, Rocket } from "lucide-react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css"; 
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
@@ -10,9 +11,20 @@ import "aos/dist/aos.css"; // Import AOS styles
 // Register the required components.
 ChartJS.register(ArcElement, Tooltip, Legend);
 
+const CATEGORY_OPTIONS = [
+  "Beverages",
+  "Breakfast",
+  "Chicken",
+  "Dessert",
+  "Lamb",
+  "Lunch/Snacks",
+  "Potato",
+  "Pork",
+  "Beef",
+  "Vegetable",
+];
 
 function App() {
-  // State for form data
   const [formData, setFormData] = useState({
     calories: "",
     carbohydrate: "",
@@ -67,10 +79,18 @@ function App() {
 
     // Proceed with the fetch request
     try {
+      const payload = {
+        calories: Number(formData.calories),
+        carbohydrate: Number(formData.carbohydrate),
+        sugar: Number(formData.sugar),
+        protein: Number(formData.protein),
+        category: formData.category,
+        servings: Number(formData.servings),
+      };
       const response = await fetch("http://127.0.0.1:8000/recipe_type", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
     
       if (!response.ok) {
@@ -110,349 +130,284 @@ function App() {
   // Toggle dark mode
   const toggleDarkMode = () => setDarkMode(!darkMode);
 
-  // Chart data for traffic probability
   const chartData = {
-    labels: ["Traffic Probability", "Remaining"],
+    labels: ["Predicted traffic", "Other"],
     datasets: [
       {
         data: [
           responseData.trafficProbability * 100 || 0,
-          100 - responseData.trafficProbability * 100 || 100,
+          100 - (responseData.trafficProbability * 100 || 0) || 100,
         ],
-        backgroundColor: ["#36A2EB", "#FF6384"],
+        backgroundColor: ["#08bfad", "rgba(8, 191, 173, 0.2)"],
+        borderWidth: 0,
       },
     ],
   };
 
+  const isHighTraffic = responseData.prediction && String(responseData.prediction).toLowerCase().includes("high");
+
   return (
-    <div className={darkMode ? "bg-dark text-white" : "bg-light text-dark"}>
-      {/* Header Bar */}
-      <nav className="navbar navbar-expand-lg" style={{ backgroundColor: "#08bfad" }}>
+    <div className="app-shell" data-theme={darkMode ? "dark" : "light"}>
+      <nav className="navbar navbar-expand-lg navbar-theme">
         <div className="container">
-          {/* TastyBytes Logo */}
-          <a className="navbar-brand text-white fs-3 fw-bold" href="#silas" style={{ fontFamily: 'Playfair Display, serif' }}>
+          <a className="navbar-brand fw-bold nav-brand" href="/">
             TastyBytes
           </a>
 
-          {/* Mobile View: Toggle Button and Dark Mode */}
-          <div className="d-lg-none d-flex align-items-center">
+          <div className="d-lg-none d-flex align-items-center gap-2">
             <button
-              className="btn btn-link text-white text-decoration-none me-3"
+              type="button"
+              className="btn btn-link text-decoration-none p-2 nav-theme-btn"
               onClick={toggleDarkMode}
-              style={{ fontSize: "1.5rem" }}
+              aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
             >
-              <i className={darkMode ? "bi bi-sun-fill" : "bi bi-moon-fill"}></i>
+              <i className={darkMode ? "bi bi-sun-fill fs-5" : "bi bi-moon-fill fs-5"} />
             </button>
             <button
-              className="navbar-toggler"
+              className="navbar-toggler nav-toggler-btn"
               type="button"
               data-bs-toggle="offcanvas"
               data-bs-target="#offcanvasNavbar"
               aria-controls="offcanvasNavbar"
-              style={{
-                borderColor: "white",
-                fontSize: "0.8rem",
-              }}
-              onMouseOver={(e) => (e.target.style.backgroundColor = "#0ec3f0")}
-              onMouseOut={(e) => (e.target.style.backgroundColor = "transparent")}
+              aria-label="Open menu"
             >
-              <span className="navbar-toggler-icon"></span>
+              <span className="navbar-toggler-icon" />
             </button>
           </div>
 
-          {/* Large Screen: Inline Navigation */}
           <div className="collapse navbar-collapse d-none d-lg-flex justify-content-end align-items-center">
-            <ul className="navbar-nav d-flex align-items-center">
-              <li className="nav-item me-2">
-                <a
-                  href="#prediction"
-                  className="btn"
-                  style={{
-                    backgroundColor: "#09a5ed", // Button background color
-                    color: "white", // Text color
-                    border: "none",
-                    padding: "7px 15px",
-                    borderRadius: "6px",
-                  }}
-                >
+            <ul className="navbar-nav d-flex align-items-center gap-2">
+              <li className="nav-item">
+                <a href="#prediction" className="nav-cta">
                   Run Prediction
                 </a>
               </li>
-              <li className="nav-item me-2">
-                <a
-                  href="#about"
-                  className="btn"
-                  style={{
-                    backgroundColor: "#09a5ed", // Button background color
-                    color: "white", // Text color
-                    border: "none",
-                    padding: "7px 15px",
-                    borderRadius: "6px",
-                  }}
-                >
+              <li className="nav-item">
+                <a href="#about" className="nav-cta">
                   About
                 </a>
               </li>
               <li className="nav-item">
                 <button
-                  className="btn btn-link text-white text-decoration-none"
+                  type="button"
+                  className="btn btn-link text-decoration-none p-2 nav-theme-btn"
                   onClick={toggleDarkMode}
-                  style={{ fontSize: "1.5rem" }}
+                  aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
                 >
-                  <i className={darkMode ? "bi bi-sun-fill" : "bi bi-moon-fill"}></i>
+                  <i className={darkMode ? "bi bi-sun-fill fs-5" : "bi bi-moon-fill fs-5"} />
                 </button>
               </li>
             </ul>
           </div>
 
-          {/* Offcanvas Menu for Mobile */}
           <div
-            className={`offcanvas offcanvas-end d-lg-none ${darkMode ? "bg-dark text-white" : "bg-light text-dark"}`}
+            className={`offcanvas offcanvas-end d-lg-none ${darkMode ? "bg-dark text-white" : "bg-light"}`}
             tabIndex="-1"
             id="offcanvasNavbar"
             aria-labelledby="offcanvasNavbarLabel"
-            style={{
-              width: "80%",
-              height: "90%",
-              transition: "transform 0.3s ease-in-out", // Faster transition (0.3s)
-            }}
           >
-            <div className="offcanvas-header" style={{ backgroundColor: "#08bfad" }}>
-              <h5 className="offcanvas-title text-white" id="offcanvasNavbarLabel">
-                Menu
-              </h5>
-              <button
-                type="button"
-                className="btn-close text-reset"
-                data-bs-dismiss="offcanvas"
-                aria-label="Close"
-              ></button>
+            <div className="offcanvas-header offcanvas-header-theme">
+              <h5 className="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
+              <button type="button" className={`btn-close offcanvas-close-btn ${darkMode ? "btn-close-white" : ""}`} data-bs-dismiss="offcanvas" aria-label="Close" />
             </div>
-            <div className="offcanvas-body d-flex flex-column align-items-center">
-              <ul className="navbar-nav w-100">
-                <li className="nav-item mb-3 text-center">
-                  <a
-                    href="#prediction"
-                    className="btn"
-                    style={{
-                      backgroundColor: "#09a5ed", // Button background color
-                      color: "white", // Text color
-                      border: "none",
-                      padding: "10px 15px", // Adjust padding for smaller buttons
-                      borderRadius: "4px",
-                    }}
-                  >
-                    Run Prediction
-                  </a>
-                </li>
-                <li className="nav-item mb-3 text-center">
-                  <a
-                    href="#about"
-                    className="btn"
-                    style={{
-                      backgroundColor: "#09a5ed", // Button background color
-                      color: "white", // Text color
-                      border: "none",
-                      padding: "10px 15px", // Adjust padding for smaller buttons
-                      borderRadius: "4px",
-                    }}
-                  >
-                    About
-                  </a>
-                </li>
-              </ul>
+            <div className="offcanvas-body d-flex flex-column align-items-center pt-4">
+              <a href="#prediction" className="nav-cta mb-3 w-100 text-center" data-bs-dismiss="offcanvas">
+                Run Prediction
+              </a>
+              <a href="#about" className="nav-cta mb-3 w-100 text-center" data-bs-dismiss="offcanvas">
+                About
+              </a>
             </div>
           </div>
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section className="hero-section text-center py-5" data-aos="fade-up">
+      <section className="hero-section" data-aos="fade-up">
         <div className="container">
-          <div className="row align-items-center">
-            {/* Text Content */}
+          <div className="row align-items-center g-4">
             <div className="col-md-6 text-md-start">
-              <h2 className="fw-bold display-4" style={{ color: "#08bfad" }}>
-                Discover the Power of Recipe Insights
-              </h2>
-              <p className="text-secondary fs-5 mt-3" style={{ color: "#ffffff"}}>
-                Your go-to app for predicting recipe traffic and analyzing recipe data.
-              </p>
+              <h2 className="fw-bold mb-3">Discover the Power of Recipe Insights</h2>
+              <p className="mb-0">Predict which recipes will drive traffic and subscriptions.</p>
             </div>
-
-            {/* Image Content */}
             <div className="col-md-6 text-center">
-              <img
-                src="/images/hero-image.jpeg"
-                alt="Hero Illustration"
-                className="img-fluid rounded shadow"
-                style={{ maxWidth: "100%", height: "auto" }}
-              />
+              <img src="/images/hero-image.jpeg" alt="Recipe insight" className="img-fluid rounded shadow" />
             </div>
           </div>
         </div>
       </section>
 
-      {/* About Section */}
-      <section id="about" className="py-5 bg-white px-3 px-md-5" data-aos="fade-right">
+      <section id="about" className="about-section py-5" data-aos="fade-right">
         <div className="container text-center">
-          <h2 className="fw-bold mb-4" style={{ color: "#19e6df" }}>
-            About Tasty Bytes
-          </h2>
-          <p className="text-secondary fs-5 about-description">
-            Tasty Bytes is a <span className="text-highlight">powerful, data-driven platform</span> built to predict recipe traffic and uncover actionable insights into recipe performance. 
-            <span className="text-highlight">Our mission</span> is to empower decision-makers in the food industry with the intelligence they need to spotlight recipes that truly resonate with users.
+          <h2 className="section-title mb-4">About Tasty Bytes</h2>
+          <p className="about-description mx-auto" style={{ maxWidth: "720px" }}>
+            Tasty Bytes is a <span className="text-highlight">data-driven platform</span> that predicts recipe traffic and uncovers actionable insights. Our mission is to help decision-makers in the food industry spotlight recipes that resonate with users.
           </p>
-
           <div className="d-flex flex-wrap justify-content-center gap-4 mt-5 text-start">
-            {/* Challenge */}
-            <div className="about-card p-3" data-aos="fade-left">
-              <h3 className="text-warning fw-bold">🎯 The Challenge</h3>
-              <p className="text-muted mt-2" style={{ fontSize: "0.8rem" }}>
-                Selecting which recipes to feature has often relied on guesswork or random choices, leading to poor performance and missed opportunities. The lack of a structured, predictive approach resulted in inconsistent user engagement and ineffective homepage content.
-              </p>
+            <div className="about-card" data-aos="fade-left">
+              <h3 className="text-warning d-flex align-items-center gap-2">
+                <Target size={22} aria-hidden />
+                The Challenge
+              </h3>
+              <p>Choosing which recipes to feature was often guesswork, leading to inconsistent engagement and missed opportunities.</p>
             </div>
-
-            {/* Solution */}
-            <div className="about-card p-3" data-aos="fade-up">
-              <h3 className="text-success fw-bold">🤖 The Solution</h3>
-              <p className="text-muted mt-2" style={{ fontSize: "0.8rem" }}>
-                Tasty Bytes leverages machine learning to accurately predict which types of recipes are most likely to attract high user traffic. By analyzing historical data and identifying performance trends, it replaces guesswork with smart, data-backed decision-making.
-              </p>
+            <div className="about-card" data-aos="fade-up">
+              <h3 className="text-success d-flex align-items-center gap-2">
+                <Bot size={22} aria-hidden />
+                The Solution
+              </h3>
+              <p>We use machine learning to predict which recipes attract high traffic, replacing guesswork with data-backed decisions.</p>
             </div>
-
-            {/* Result */}
-            <div className="about-card p-3" data-aos="fade-right">
-              <h3 className="text-danger fw-bold">🚀 The Result</h3>
-              <p className="text-muted mt-2" style={{ fontSize: "0.8rem" }}>
-                With Tasty Bytes, chefs, stakeholders, product managers, bloggers, and food brands can confidently choose recipes that drive engagement and grow subscriber bases. The result? More informed decisions, better-performing homepages, and a delicious increase in traffic.
-              </p>
+            <div className="about-card" data-aos="fade-right">
+              <h3 className="text-info d-flex align-items-center gap-2">
+                <Rocket size={22} aria-hidden />
+                The Result
+              </h3>
+              <p>Confidently choose recipes that drive engagement and grow subscribers—better homepages and more traffic.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Prediction Section */}
       <section id="prediction" className="container my-5" data-aos="zoom-in">
         <div className="row justify-content-center">
-          <div className="col-lg-6 col-md-8 col-sm-10">
-            <h2 className="fw-bold text-center mb-4" style={{ color: "#19e6df" }}>Run a Prediction</h2>
-            <form className="p-4 bg-light rounded shadow" onSubmit={handleSubmit}>
-              <input
-                className="form-control mb-3"
-                type="text"
-                name="calories"
-                placeholder="Calories"
-                value={formData.calories}
-                onChange={handleChange}
-                title="Enter the number of calories in the recipe (e.g., 200)"
-              />
-              <input
-                className="form-control mb-3"
-                type="text"
-                name="carbohydrate"
-                placeholder="Carbohydrate"
-                value={formData.carbohydrate}
-                onChange={handleChange}
-                title="Enter the amount of carbohydrates in grams (e.g., 50)"
-              />
-              <input
-                className="form-control mb-3"
-                type="text"
-                name="sugar"
-                placeholder="Sugar"
-                value={formData.sugar}
-                onChange={handleChange}
-                title="Enter the amount of sugar in grams (e.g., 20)"
-              />
-              <input
-                className="form-control mb-3"
-                type="text"
-                name="protein"
-                placeholder="Protein"
-                value={formData.protein}
-                onChange={handleChange}
-                title="Enter the amount of protein in grams (e.g., 10)"
-              />
-              <input
-                className="form-control mb-3"
-                type="text"
-                name="category"
-                placeholder="Category"
-                value={formData.category}
-                onChange={handleChange}
-                title="Enter the recipe category (e.g., Dessert)"
-              />
-              <input
-                className="form-control mb-3"
-                type="text"
-                name="servings"
-                placeholder="Servings"
-                value={formData.servings}
-                onChange={handleChange}
-                title="Enter the number of servings (e.g., 4)"
-              />
-              <div className="text-center">
-                <button className="btn btn-primary" type="submit">
-                  Predict
+          <div className="col-lg-7 col-md-9">
+            <h2 className="section-title text-center mb-4">Run a Prediction</h2>
+            <form className="prediction-form" onSubmit={handleSubmit}>
+              <div className="row g-3">
+                <div className="col-md-6">
+                  <label htmlFor="calories" className="form-label">Calories (per serving)</label>
+                  <input
+                    id="calories"
+                    className="form-control"
+                    type="number"
+                    min="0"
+                    step="1"
+                    name="calories"
+                    placeholder="e.g. 200"
+                    value={formData.calories}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-md-6">
+                  <label htmlFor="carbohydrate" className="form-label">Carbohydrate (g)</label>
+                  <input
+                    id="carbohydrate"
+                    className="form-control"
+                    type="number"
+                    min="0"
+                    step="0.1"
+                    name="carbohydrate"
+                    placeholder="e.g. 50"
+                    value={formData.carbohydrate}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-md-6">
+                  <label htmlFor="sugar" className="form-label">Sugar (g)</label>
+                  <input
+                    id="sugar"
+                    className="form-control"
+                    type="number"
+                    min="0"
+                    step="0.1"
+                    name="sugar"
+                    placeholder="e.g. 20"
+                    value={formData.sugar}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-md-6">
+                  <label htmlFor="protein" className="form-label">Protein (g)</label>
+                  <input
+                    id="protein"
+                    className="form-control"
+                    type="number"
+                    min="0"
+                    step="0.1"
+                    name="protein"
+                    placeholder="e.g. 10"
+                    value={formData.protein}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-md-6">
+                  <label htmlFor="category" className="form-label">Category</label>
+                  <select
+                    id="category"
+                    className="form-select"
+                    name="category"
+                    value={formData.category}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select category</option>
+                    {CATEGORY_OPTIONS.map((cat) => (
+                      <option key={cat} value={cat}>{cat}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="col-md-6">
+                  <label htmlFor="servings" className="form-label">Servings</label>
+                  <input
+                    id="servings"
+                    className="form-control"
+                    type="number"
+                    min="1"
+                    step="1"
+                    name="servings"
+                    placeholder="e.g. 4"
+                    value={formData.servings}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+              <div className="d-flex flex-wrap gap-2 justify-content-center mt-4">
+                <button className="btn btn-predict" type="submit" disabled={isLoading}>
+                  {isLoading ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm me-2 loading-spinner" role="status" aria-hidden="true" />
+                      Predicting…
+                    </>
+                  ) : (
+                    "Predict"
+                  )}
                 </button>
-                <button className="btn btn-secondary ms-2" type="button" onClick={handleClear}>
+                <button className="btn btn-clear" type="button" onClick={handleClear} disabled={isLoading}>
                   Clear
                 </button>
               </div>
             </form>
           </div>
         </div>
+
+        {errorMessage && (
+          <div className="alert alert-danger alert-api mt-3" role="alert">
+            {errorMessage}
+          </div>
+        )}
       </section>
 
-      {isLoading && <p className="text-center mt-3">Loading...</p>}
-      {errorMessage && <p className="text-danger text-center mt-3">{errorMessage}</p>}
-
-      {/* Prediction Results Section */}
       {responseData.prediction && (
-        <section className="container my-5 text-center">
-          <div
-            className="p-4 rounded shadow"
-            style={{
-              backgroundColor: "#f8f9fa", // Light gray background
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)", // Subtle shadow
-              borderRadius: "10px", // Rounded corners
-              maxWidth: "500px",
-              margin: "0 auto", // Center the box
-            }}
-          >
-            <h3 className="fw-bold" style={{ color: "#08bfad" }}>Prediction Results</h3>
-            <p style={{ fontSize: "1.2rem", color: "#333" }}>
-              The traffic is predicted to be{" "}
-              <strong style={{ color: "#08bfad" }}>{responseData.prediction}</strong> with a probability of{" "}
-              <strong style={{ color: "#ff6f61" }}>
-                {(responseData.trafficProbability * 100).toFixed(2)}%
-              </strong>.
+        <section className="container my-5 text-center" data-aos="fade-up">
+          <div className="result-card">
+            <h3 className="section-title mb-3">Prediction Results</h3>
+            <p className="mb-2">
+              Traffic is predicted as{" "}
+              <span className={`badge badge-traffic ${isHighTraffic ? "bg-success" : "bg-secondary"}`}>
+                {responseData.prediction}
+              </span>
             </p>
-            <div
-              className="my-4"
-              style={{
-                width: "300px",
-                height: "300px",
-                margin: "0 auto",
-              }}
-            >
-              <Pie data={chartData} />
+            <p className="mb-4 text-muted">
+              Confidence: <strong style={{ color: "var(--brand)" }}>{(responseData.trafficProbability * 100).toFixed(1)}%</strong>
+            </p>
+            <div className="result-chart-wrap">
+              <Pie data={chartData} options={{ responsive: true, maintainAspectRatio: true }} />
             </div>
           </div>
         </section>
       )}
 
-      
-  
-      {/* Footer */}
-      <footer
-        className="text-center py-3"
-        style={{ backgroundColor: "#08bfad", color: "white" }}
-      >
-        <p>
-          Tasty Bytes | Powered by FastAPI and React
-        </p>
+      <footer className="footer-bar text-center py-4">
+        <p>Tasty Bytes · Powered by FastAPI & React</p>
       </footer>
     </div>
   );
