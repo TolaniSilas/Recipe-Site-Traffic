@@ -11,14 +11,15 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api_dev.schemas import PredictionInput, PredictionOutput
 from decimal import Decimal
 
-
 # Instantiate the FastAPI application.
 app = FastAPI()
+
+FRONTEND_ORIGIN = os.getenv("FRONTEND_ORIGIN", "http://localhost:3000")
 
 # Add CORS middleware.
 app.add_middleware(
     CORSMiddleware, 
-    allow_origins=["http://localhost:3000"],
+    allow_origins=[FRONTEND_ORIGIN],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]

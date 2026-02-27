@@ -11,6 +11,8 @@ import "aos/dist/aos.css"; // Import AOS styles
 // Register the required components.
 ChartJS.register(ArcElement, Tooltip, Legend);
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://127.0.0.1:8000";
+
 const CATEGORY_OPTIONS = [
   "Beverages",
   "Breakfast",
@@ -87,7 +89,7 @@ function App() {
         category: formData.category,
         servings: Number(formData.servings),
       };
-      const response = await fetch("http://127.0.0.1:8000/recipe_type", {
+      const response = await fetch(`${API_BASE_URL}/recipe_type`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

@@ -4,14 +4,24 @@ FROM python:3.12-slim
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the requirements file into the container
-COPY requirements.txt .
+# Install uv (via pip for simplicity)
+RUN pip install --no-cache-dir uv
 
-# Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy Python project metadata and install dependencies
+COPY pyproject.toml ./
 
-# Copy the application code into the container
-COPY . .
+# After (tell uv to use system env)
+RUN uv pip install . --system --no-cache-dir
+
+# Copy backend code and shared src package into the image
+COPY app/api_dev ./app/api_dev
+COPY src ./src
+
+# (Optional) if you want models baked in instead of mounted:
+# COPY models ./models
+
+# Switch to the API app directory
+WORKDIR /app/app/api_dev
 
 # Expose the port FastAPI will run on
 EXPOSE 8000
