@@ -85,7 +85,7 @@ npm start
 
 Build & deployment details: `app/web_app/README.md`.
 
-## Repository structure
+## Project structure
 
 ```text
 Recipe-Site-Traffic
@@ -101,6 +101,52 @@ Recipe-Site-Traffic
 ├── README.md           # this current file
 └── LICENSE             # MIT license
 ```
+
+## Testing
+
+### 1. Python unit & API tests
+
+All backend tests live under `app/api_dev/tests/` and use **pytest**.
+
+From the **repository root** (with your virtualenv active and deps installed via `uv sync`):
+
+```bash
+uv run pytest app/api_dev/tests --headed
+```
+
+This runs:
+
+- `test_main_api.py` – FastAPI endpoints (`/health`, `/recipe_type`) using a TestClient (model is monkeypatched, so no real `.joblib` required).
+- `test_schemas.py` – Pydantic request/response models (`PredictionInput`, `PredictionOutput`).
+
+### 2. Playwright end-to-end test (web + API)
+
+There is a basic E2E test in `app/api_dev/tests/test_app_e2e_playwright.py` that:
+
+- Starts a real browser (Chromium via Playwright).
+- Navigates to the React app.
+- Fills the prediction form and submits.
+- Asserts that **Prediction Results** and a probability percentage are shown.
+
+To run it:
+
+1. Ensure **backend and frontend are running** ( via local dev servers). Check the web_app readme.md and api_dev readme.md to do this.
+2. Install Playwright and browsers (Chromium only if you prefer):
+
+   ```bash
+   uv pip install playwright pytest-playwright --system
+   uv run playwright install chromium
+   ```
+
+3. Run the E2E test:
+
+   ```bash
+   pytest app/api_dev/tests/test_app_e2e_playwright.py
+
+   # or using headed (visible browser):
+
+   # pytest app/api_dev/tests/test_app_e2e_playwright.py --headed
+   ```
 
 ## Contributing
 

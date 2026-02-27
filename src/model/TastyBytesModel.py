@@ -28,7 +28,7 @@ class TastyModel:
         Args:
             model (optional): A scikit-learn classifier instance. Defaults to None.
 
-        Example:
+        Usage:
             >>> from sklearn.ensemble import RandomForestClassifier
             >>> model = RandomForestClassifier()
             >>> tasty_model = TastyModel(model=model)
