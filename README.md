@@ -76,7 +76,9 @@ More details and production notes: `app/api_dev/README.md`.
 
 ```bash
 cd app/web_app
+
 npm install
+
 npm start
 ```
 
@@ -147,6 +149,37 @@ To run it:
 
    # pytest app/api_dev/tests/test_app_e2e_playwright.py --headed
    ```
+
+## Docker deployment
+
+You can run the **API** and **web app** together using Docker Compose (see `docker-compose.yml`).
+
+From the **repository root**:
+
+```bash
+docker compose build
+docker compose up
+```
+
+This will:
+
+- Build and start the FastAPI API container on `http://localhost:8000`
+- Build and start the React frontend container on `http://localhost:3000`
+
+Key configuration:
+
+- `FRONTEND_ORIGIN` (env for the API, set in `docker-compose.yml`) controls which frontend origin CORS allows.
+  - Local: `http://localhost:3000`
+  - Production: set to your real frontend URL (e.g. `https://tastybytes.app`)
+- `REACT_APP_API_BASE_URL` (build arg for the frontend image) controls where the web app sends API requests.
+  - Local Docker: `http://api:8000` (service name inside the Docker network)
+  - Production: use your public API URL, or default to `/api` and route with a reverse proxy.
+
+To stop the stack:
+
+```bash
+docker compose down
+```
 
 ## Contributing
 
